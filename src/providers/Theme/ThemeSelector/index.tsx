@@ -13,6 +13,7 @@ import type { Theme } from './types'
 
 import { useTheme } from '..'
 import { themeLocalStorageKey } from './types'
+import { MoonIcon, SunIcon } from 'lucide-react'
 
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme()
@@ -43,8 +44,8 @@ export const ThemeSelector: React.FC = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="auto">Auto</SelectItem>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
+        <SelectItem value="light"><SunIcon className='size-4 text-zinc-500' /></SelectItem>
+        <SelectItem value="dark"><MoonIcon className='size-4 text-zinc-500' /></SelectItem>
       </SelectContent>
     </Select>
   )

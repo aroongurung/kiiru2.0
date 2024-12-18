@@ -1,52 +1,64 @@
-import { cn } from 'src/utilities/cn'
 import React, { Fragment } from 'react'
-
 import type { Page } from '@/payload-types'
 
-import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ContentBlock } from '@/blocks/Content/Component'
-import { FormBlock } from '@/blocks/Form/Component'
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
+// Import components
+import { ArchiveBlock as ArchiveBlockComponent } from '@/blocks/ArchiveBlock/Component'
+import { CallToActionBlock as CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
+import { ContentBlock as ContentBlockComponent } from '@/blocks/Content/Component'
+import { FormBlock as FormBlockComponent } from '@/blocks/Form/Component'
+import { MediaBlock as MediaBlockComponent } from '@/blocks/MediaBlock/Component'
+import { CoverAdBlockComponent } from '@/blocks/CoverAdBlock/Component'
+import ServicesBlockComponent from './ServiceBlock/Component'
+import OnlyTextBlockComponent from './OnlyText/Component'
+import QuizBlockComponent from './Quiz/Component'
+import SurveyBlockComponent from './Survey/Component'
 
-const blockComponents = {
-  archive: ArchiveBlock,
-  content: ContentBlock,
-  cta: CallToActionBlock,
-  formBlock: FormBlock,
-  mediaBlock: MediaBlock,
+
+// Create a more generic type for block components
+type GenericBlockComponent = React.FC<any>
+
+// Component mapping with more flexible typing
+const blockComponents: Record<string, GenericBlockComponent> = {
+  archive: ArchiveBlockComponent,
+  content: ContentBlockComponent,
+  cta: CallToActionBlockComponent,
+  formBlock: FormBlockComponent,
+  mediaBlock: MediaBlockComponent,
+  coverAdBlock: CoverAdBlockComponent,
+  services: ServicesBlockComponent,
+  onlytext: OnlyTextBlockComponent,
+  quiz : QuizBlockComponent,
+  survey: SurveyBlockComponent,
+  
 }
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
-}> = (props) => {
-  const { blocks } = props
-
+}> = ({ blocks }) => {
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
-  if (hasBlocks) {
-    return (
-      <Fragment>
-        {blocks.map((block, index) => {
-          const { blockType } = block
+  if (!hasBlocks) return null
 
-          if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType]
+  return (
+    <Fragment>
+      {blocks.map((block, index) => {
+        const { blockType } = block
 
-            if (Block) {
-              return (
-                <div className="my-16" key={index}>
-                  {/* @ts-expect-error */}
-                  <Block {...block} />
-                </div>
-              )
-            }
-          }
-          return null
-        })}
-      </Fragment>
-    )
-  }
+        // Type-safe component lookup with fallback
+        const Component = blockType 
+          ? blockComponents[blockType] 
+          : null
 
-  return null
+        if (Component) {
+          return (
+            <div className="my-16" key={index}>
+              <Component {...block} />
+            </div>
+          )
+        }
+
+        return null
+      })}
+    </Fragment>
+  )
 }

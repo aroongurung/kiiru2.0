@@ -21,6 +21,12 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { getServerSideURL } from '@/utilities/getURL'
+import { CoverAdBlock } from '@/blocks/CoverAdBlock/config'
+import { ServicesBlock } from '@/blocks/ServiceBlock/config'
+import { OnlyTextBlock } from '@/blocks/OnlyText/config'
+import { QuizBlock } from '@/blocks/Quiz/config'
+import { SurveyBlock } from '@/blocks/Survey/config'
+
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -77,7 +83,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, CoverAdBlock, ServicesBlock, OnlyTextBlock, QuizBlock, SurveyBlock],
               required: true,
               admin: {
                 initCollapsed: true,

@@ -1,14 +1,51 @@
-import { formatDateTime } from 'src/utilities/formatDateTime'
-import React from 'react'
+import { formatDateTime } from 'src/utilities/formatDateTime';
+import React from 'react';
 
-import type { Post } from '@/payload-types'
+import type { Post } from '@/payload-types';
 
-import { Media } from '@/components/Media'
+import { Media } from '@/components/Media';
 
-export const PostHero: React.FC<{
-  post: Post
-}> = ({ post }) => {
-  const { categories, meta: { image: metaImage } = {}, populatedAuthors, publishedAt, title } = post
+// Define the structure for content's root
+type ContentBlock = {
+  type: string;
+  children?: Array<{
+    type: string;
+    version: number;
+    text?: string;
+    children?: Array<{ text: string }>;
+    [k: string]: unknown;
+  }>;
+};
+
+const readTime = (content: { root: ContentBlock }): number => {
+  let numWords = 0;
+
+  if (!content?.root || !content.root.children) return 1;
+
+  // Function to recursively count words in nested children
+  const countWordsInChildren = (children: Array<any>) => {
+    for (let child of children) {
+      if (child.text) {
+        numWords += child.text.split(' ').filter((r) => r !== "").length;
+      }
+      if (child.children) {
+        countWordsInChildren(child.children); // Recurse into nested children
+      }
+    }
+  };
+
+  // Start counting words from the root's children
+  countWordsInChildren(content.root.children);
+
+  const timeToReadMinutes = Math.ceil(numWords / 200);
+  return timeToReadMinutes;
+};
+
+export const PostHero: React.FC<{ post: Post }> = ({ post }) => {
+  const { categories, meta: { image: metaImage } = {}, populatedAuthors, publishedAt, title, content } = post;
+  
+  // Check if content exists and is of the correct shape
+  const readTimeNum = content && 'root' in content ? readTime(content) : 0; // Ensure content has the root property
 
   return (
     <div className="relative -mt-[10.4rem] flex items-end">
@@ -17,20 +54,18 @@ export const PostHero: React.FC<{
           <div className="uppercase text-sm mb-6">
             {categories?.map((category, index) => {
               if (typeof category === 'object' && category !== null) {
-                const { title: categoryTitle } = category
-
-                const titleToUse = categoryTitle || 'Untitled category'
-
-                const isLast = index === categories.length - 1
+                const { title: categoryTitle } = category;
+                const titleToUse = categoryTitle || 'Untitled category';
+                const isLast = index === categories.length - 1;
 
                 return (
                   <React.Fragment key={index}>
                     {titleToUse}
                     {!isLast && <React.Fragment>, &nbsp;</React.Fragment>}
                   </React.Fragment>
-                )
+                );
               }
-              return null
+              return null;
             })}
           </div>
 
@@ -44,51 +79,42 @@ export const PostHero: React.FC<{
                 <div className="flex flex-col gap-1">
                   <p className="text-sm">Author</p>
                   {populatedAuthors.map((author, index) => {
-                    const { name } = author
-
-                    const isLast = index === populatedAuthors.length - 1
-                    const secondToLast = index === populatedAuthors.length - 2
+                    const { name } = author;
+                    const isLast = index === populatedAuthors.length - 1;
+                    const secondToLast = index === populatedAuthors.length - 2;
 
                     return (
                       <React.Fragment key={index}>
                         {name}
-                        {secondToLast && populatedAuthors.length > 2 && (
-                          <React.Fragment>, </React.Fragment>
-                        )}
-                        {secondToLast && populatedAuthors.length === 2 && (
-                          <React.Fragment> </React.Fragment>
-                        )}
-                        {!isLast && populatedAuthors.length > 1 && (
-                          <React.Fragment>and </React.Fragment>
-                        )}
+                        {secondToLast && populatedAuthors.length > 2 && <React.Fragment>, </React.Fragment>}
+                        {secondToLast && populatedAuthors.length === 2 && <React.Fragment> </React.Fragment>}
+                        {!isLast && populatedAuthors.length > 1 && <React.Fragment>and </React.Fragment>}
                       </React.Fragment>
-                    )
+                    );
                   })}
                 </div>
               )}
             </div>
+
             {publishedAt && (
               <div className="flex flex-col gap-1">
                 <p className="text-sm">Date Published</p>
-
                 <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
               </div>
             )}
+            <div>{readTimeNum} mins read</div>
           </div>
         </div>
       </div>
-      <div className="min-h-[80vh] select-none">
-        {metaImage && typeof metaImage !== 'string' && (
-          <Media
-            fill
-            priority={false}
-            loading="lazy"
-            imgClassName="-z-10 object-cover"
-            resource={metaImage}
-          />
-        )}
-        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
+
+      <div className="min-h-[50vh] select-none">
+      
+          {metaImage && typeof metaImage !== 'string' && (
+            <Media fill priority={false} loading="lazy" imgClassName="-z-10 object-cover" resource={metaImage} />
+          )}
+          <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
+        </div>
       </div>
-    </div>
-  )
-}
+   
+  );
+};

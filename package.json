@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "kiiru",
   "version": "1.0.0",
-  "description": "Website template for Payload",
+  "description": "Personal Blog",
   "license": "MIT",
   "type": "module",
   "scripts": {

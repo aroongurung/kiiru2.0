@@ -13,6 +13,10 @@ import type { Post } from '@/payload-types'
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
+import Link from 'next/link'
+import { ArrowLeftIcon, HomeIcon } from 'lucide-react'
+import { Comments } from '@/components/Comments' // Note the lowercase 'c'
+
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -50,7 +54,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   return (
     <article className="pt-16 pb-16">
       <PageClient />
-
+      
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
@@ -60,12 +64,33 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="container">
           <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
           {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
+            <RelatedPosts 
               className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
               docs={post.relatedPosts.filter((post) => typeof post === 'object')}
             />
           )}
+          {/* Add Comments section */}
+          <div className="max-w-[48rem] mx-auto mt-16">
+            <Comments postId={typeof post.id === 'string' ? parseInt(post.id, 10) : post.id} />
+          </div>
         </div>
+      </div>
+      <div className='container max-w-[52rem] flex justify-between mt-8'>
+        <Link 
+            href= "/posts"
+            className='mt-8 inline-flex items-center gap-2 text-sm font-light'
+        >
+          <ArrowLeftIcon className='h-5 w-5' />
+          <span>Back to Post</span>
+        </Link>
+      
+        <Link 
+            href= "/"
+            className='mt-8 inline-flex items-center gap-2 text-sm font-light'            
+        >
+          <HomeIcon className='h-5 w-5' />  
+          <span>Back to Home</span>
+        </Link>
       </div>
     </article>
   )

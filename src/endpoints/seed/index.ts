@@ -17,6 +17,7 @@ const collections: CollectionSlug[] = [
   'forms',
   'form-submissions',
   'search',
+
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
 

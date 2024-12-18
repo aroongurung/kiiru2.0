@@ -20,7 +20,7 @@ export const homeStatic: Page = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Payload Website Template',
+                text: 'Kiiru Personal Website',
                 version: 1,
               },
             ],
@@ -42,7 +42,7 @@ export const homeStatic: Page = {
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: 'Visit the admin dashboard',
+                    text: 'Welcome to Kiiru(Admin Page) ',
                     version: 1,
                   },
                 ],
@@ -62,7 +62,7 @@ export const homeStatic: Page = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: ' to make your account and seed content for your website.',
+                text: ' do send me your stories or queries to read.',
                 version: 1,
               },
             ],
@@ -86,3 +86,4 @@ export const homeStatic: Page = {
   },
   title: 'Home',
 }
+
