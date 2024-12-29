@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import type { Header as HeaderType } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
-import { Menu, X, FlaskConical, SearchIcon } from 'lucide-react'
+import { Menu, X, SearchIcon } from 'lucide-react'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { useRouter } from 'next/navigation'
 
@@ -42,7 +42,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
   };
 
   const NavList = () => (
-    <div className="flex flex-col  sm:flex-row gap-6 items-start sm:items-center">
+    <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
       {navItems.map(({ link }, i) => (
         <div 
           key={i} 
@@ -52,7 +52,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           <CMSLink 
             {...link} 
             appearance="link" 
-            className="block py-2 hover:bg-secondary/10 w-full text-xl sm:text-2xl"
+            className="block py-2 hover:bg-secondary/10 w-full text-xl sm:text-2xl "
           />
         </div>
       ))}
@@ -64,19 +64,13 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
         className="w-full cursor-pointer"
       >
         <span className="sr-only">Search</span>
-        <SearchIcon className="w-5 text-primary" />
+        <SearchIcon className="w-6 text-primary" />
       </div>
       <ThemeSelector   />
-      <div 
-        onClick={() => {
-          setIsMobileMenuOpen(false);
-          router.push('/lab');
-        }}
-        className="w-full flex items-center justify-start cursor-pointer"
-      >  
+      
       
       </div>
-    </div>
+    
   );
 
   return (
@@ -97,7 +91,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           {isMobileMenuOpen ? (
             <X className="w-6 h-6 text-primary" />
           ) : (
-            <Menu className="w-6 h-6 text-primary" />
+            <Menu className="w-7 h-7 text-primary text-zinc-950" />
           )}
         </button>
 
@@ -108,7 +102,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <nav 
-              className="flex flex-col space-y-2"
+              className="flex flex-col space-y-4"
               onClick={(e) => e.stopPropagation()}
             >
               <NavList />

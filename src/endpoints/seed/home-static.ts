@@ -81,7 +81,7 @@ export const homeStatic: Page = {
     },
   },
   meta: {
-    description: 'An open-source website built with Payload and Next.js.',
+    description: 'A website and blog about Finland,technology and happenings around',
     title: 'Payload Website Template',
   },
   title: 'Home',

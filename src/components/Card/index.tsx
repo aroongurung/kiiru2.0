@@ -8,44 +8,11 @@ import React, { Fragment } from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import ReadTimeClient from '../myCustom/readtimeclient'
 
-// Define the structure for content's root
-type ContentBlock = {
-  type: string;
-  children?: Array<{
-    type: string;
-    version: number;
-    text?: string;
-    children?: Array<{ text: string }>;
-    [k: string]: unknown;
-  }>;
-}
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'content'>
 
-const readTime = (content: { root: ContentBlock }): number => {
-  let numWords = 0;
-
-  if (!content?.root || !content.root.children) return 1;
-
-  // Function to recursively count words in nested children
-  const countWordsInChildren = (children: Array<any>) => {
-    for (let child of children) {
-      if (child.text) {
-        numWords += child.text.split(' ').filter((r) => r !== "").length;
-      }
-      if (child.children) {
-        countWordsInChildren(child.children); // Recurse into nested children
-      }
-    }
-  };
-
-  // Start counting words from the root's children
-  countWordsInChildren(content.root.children);
-
-  const timeToReadMinutes = Math.ceil(numWords / 200);
-  return timeToReadMinutes;
-};
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -66,9 +33,7 @@ export const Card: React.FC<{
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
 
-  // Calculate read time if content exists
-  const readTimeNum = content && 'root' in content ? readTime(content) : 0;
-
+  
   return (
     <article
       className={cn(
@@ -108,7 +73,10 @@ export const Card: React.FC<{
 
           {/* Display Read Time */}
           <div className="text-sm">
-            {readTimeNum} mins read
+           {/* Client Component for Read Time */}
+           {content && 'root' in content && (
+                <ReadTimeClient content={content} />
+              )}
           </div>
         </div>
 

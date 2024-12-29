@@ -33,10 +33,10 @@ const PageUpButton = () => {
       {isVisible && (
         <button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:bg-zinc-300 hover:text-zinc-950 transition"
+        className="fixed bottom-48 right-48 p-3 rounded-full shadow-lg md:right-80 md:bottom-40 hover:bg-zinc-300 hover:text-zinc-950 transition"
         aria-label="Scroll to top"
       >
-        <ArrowUp size={24} />
+        <ArrowUp size={28} />
       </button>
       
       )}

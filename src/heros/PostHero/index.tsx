@@ -4,51 +4,15 @@ import React from 'react';
 import type { Post } from '@/payload-types';
 
 import { Media } from '@/components/Media';
+import ReadTimeClient from '@/components/myCustom/readtimeclient'
 
-// Define the structure for content's root
-type ContentBlock = {
-  type: string;
-  children?: Array<{
-    type: string;
-    version: number;
-    text?: string;
-    children?: Array<{ text: string }>;
-    [k: string]: unknown;
-  }>;
-};
 
-const readTime = (content: { root: ContentBlock }): number => {
-  let numWords = 0;
-
-  if (!content?.root || !content.root.children) return 1;
-
-  // Function to recursively count words in nested children
-  const countWordsInChildren = (children: Array<any>) => {
-    for (let child of children) {
-      if (child.text) {
-        numWords += child.text.split(' ').filter((r) => r !== "").length;
-      }
-      if (child.children) {
-        countWordsInChildren(child.children); // Recurse into nested children
-      }
-    }
-  };
-
-  // Start counting words from the root's children
-  countWordsInChildren(content.root.children);
-
-  const timeToReadMinutes = Math.ceil(numWords / 200);
-  return timeToReadMinutes;
-};
 
 export const PostHero: React.FC<{ post: Post }> = ({ post }) => {
   const { categories, meta: { image: metaImage } = {}, populatedAuthors, publishedAt, title, content } = post;
-  
-  // Check if content exists and is of the correct shape
-  const readTimeNum = content && 'root' in content ? readTime(content) : 0; // Ensure content has the root property
 
   return (
-    <div className="relative -mt-[10.4rem] flex items-end">
+    <div className="relative max-w-[52rem] mx-auto -mt-12 flex items-end">
       <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] text-white pb-8">
         <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
           <div className="uppercase text-sm mb-6">
@@ -77,44 +41,56 @@ export const PostHero: React.FC<{ post: Post }> = ({ post }) => {
             <div className="flex flex-col gap-4">
               {populatedAuthors && (
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm">Author</p>
-                  {populatedAuthors.map((author, index) => {
-                    const { name } = author;
-                    const isLast = index === populatedAuthors.length - 1;
-                    const secondToLast = index === populatedAuthors.length - 2;
+                  <span className="text-sm">Author</span>
+                  <div className='author-names'>
+                    {populatedAuthors.map((author, index) => {
+                      const { name } = author;
+                      const isLast = index === populatedAuthors.length - 1;
+                      const secondToLast = index === populatedAuthors.length - 2;
 
-                    return (
-                      <React.Fragment key={index}>
-                        {name}
-                        {secondToLast && populatedAuthors.length > 2 && <React.Fragment>, </React.Fragment>}
-                        {secondToLast && populatedAuthors.length === 2 && <React.Fragment> </React.Fragment>}
-                        {!isLast && populatedAuthors.length > 1 && <React.Fragment>and </React.Fragment>}
-                      </React.Fragment>
-                    );
-                  })}
+                      return (
+                        <React.Fragment key={index}>
+                          {name}
+                          {secondToLast && populatedAuthors.length > 2 && <React.Fragment>, </React.Fragment>}
+                          {secondToLast && populatedAuthors.length === 2 && <React.Fragment> </React.Fragment>}
+                          {!isLast && populatedAuthors.length > 1 && <React.Fragment>and </React.Fragment>}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
 
             {publishedAt && (
               <div className="flex flex-col gap-1">
-                <p className="text-sm">Date Published</p>
+                <span className="text-sm">Date Published</span>
                 <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
               </div>
             )}
-            <div>{readTimeNum} mins read</div>
+            <div>
+              {/* Client Component for Read Time */}
+              {content && 'root' in content && (
+                <ReadTimeClient content={content} />
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="min-h-[50vh] select-none">
-      
-          {metaImage && typeof metaImage !== 'string' && (
-            <Media fill priority={false} loading="lazy" imgClassName="-z-10 object-cover" resource={metaImage} />
-          )}
-          <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
-        </div>
+
+        {metaImage && typeof metaImage !== 'string' && (
+          <Media 
+          fill priority={false} 
+          loading="lazy" 
+          imgClassName="-z-10 object-cover" 
+          resource={metaImage} 
+          />
+        )}
+        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent" />
       </div>
-   
+    </div>
+
   );
 };
