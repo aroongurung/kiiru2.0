@@ -65,10 +65,7 @@ export const Media: CollectionConfig = {
         name: 'large',
         width: 1400,
       },
-      {
-        name: 'xlarge',
-        width: 1920,
-      },
+      
       {
         name: 'og',
         width: 1200,

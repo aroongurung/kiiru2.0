@@ -82,7 +82,7 @@ export const homeStatic: Page = {
   },
   meta: {
     description: 'A website and blog about Finland,technology and happenings around',
-    title: 'Payload Website Template',
+    title: 'kiiru',
   },
   title: 'Home',
 }
