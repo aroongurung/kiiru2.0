@@ -29,7 +29,7 @@ export const Logo = (props: Props) => {
           className={clsx('max-w-[3rem] w-auto h-auto object-contain', className)}
         />
         <div className='ml-0 pl-0'>
-          <span className='font-bold text-3xl text-black dark:text-white'>Kiiru<sup>&reg;</sup></span>
+          <span className='font-bold text-3xl'>Kiiru<sup>&reg;</sup></span>
         </div>
       </nav>
     </>

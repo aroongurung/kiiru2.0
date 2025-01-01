@@ -44,8 +44,8 @@ export const ThemeSelector: React.FC = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="auto">Auto</SelectItem>
-        <SelectItem value="light"><SunIcon className='size-4 text-zinc-500' /></SelectItem>
-        <SelectItem value="dark"><MoonIcon className='size-4 text-zinc-500' /></SelectItem>
+        <SelectItem value="light"><SunIcon className='size-4 text-zinc-600' /></SelectItem>
+        <SelectItem value="dark"><MoonIcon className='size-4 text-zinc-600' /></SelectItem>
       </SelectContent>
     </Select>
   )

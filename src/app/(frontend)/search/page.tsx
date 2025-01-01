@@ -1,5 +1,4 @@
 import type { Metadata } from 'next/types'
-
 import { CollectionArchive } from '@/components/CollectionArchive'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -12,8 +11,24 @@ import { CardPostData } from '@/components/Card'
 type Args = {
   searchParams: Promise<{
     q: string
-  }>
+  }>   
 }
+
+// Helper function to transform payload data to CardPostData
+const transformToCardPostData = (doc: any): CardPostData => {
+  return {
+    title: doc.title || '',
+    slug: doc.slug || '',
+    content: doc.content || '', 
+    meta: {
+      title: doc.meta?.title || doc.title || '',
+      description: doc.meta?.description || '',
+      image: doc.meta?.image || null,
+    },
+    categories: doc.categories || [],
+  }
+}
+
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
@@ -27,8 +42,8 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       slug: true,
       categories: true,
       meta: true,
+      content: true,
     },
-    // pagination: false reduces overhead if you don't need totalDocs
     pagination: false,
     ...(query
       ? {
@@ -60,6 +75,9 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       : {}),
   })
 
+  // Transform the payload data to match CardPostData type
+  const transformedPosts = posts.docs.map(transformToCardPostData)
+
   return (
     <div className="pt-24 pb-24">
       <PageClient />
@@ -74,7 +92,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <CollectionArchive posts={transformedPosts} />
       ) : (
         <div className="container">No results found.</div>
       )}

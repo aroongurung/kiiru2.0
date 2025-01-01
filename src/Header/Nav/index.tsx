@@ -52,7 +52,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           <CMSLink 
             {...link} 
             appearance="link" 
-            className="block py-2 hover:bg-secondary/10 w-full text-xl sm:text-2xl "
+            className="block py-2 hover:bg-secondary/10 w-full text-xl text-zinc-600 sm:text-2xl "
           />
         </div>
       ))}
@@ -64,7 +64,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
         className="w-full cursor-pointer"
       >
         <span className="sr-only">Search</span>
-        <SearchIcon className="w-6 text-primary" />
+        <SearchIcon className="w-6 text-primary text-zinc-600" />
       </div>
       <ThemeSelector   />
       
@@ -91,7 +91,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           {isMobileMenuOpen ? (
             <X className="w-6 h-6 text-primary" />
           ) : (
-            <Menu className="w-7 h-7 text-primary text-zinc-950" />
+            <Menu className="w-7 h-7 text-primary" />
           )}
         </button>
 
